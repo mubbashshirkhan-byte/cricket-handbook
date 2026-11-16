@@ -267,6 +267,12 @@ ul, ol { list-style: none; }
 .match-actions .btn:disabled { opacity: .45; cursor: not-allowed; }
 .btn-danger { border-color: #d62828; color: #d62828; background: transparent; }
 .btn-danger:hover { background: #d62828; color: #fff; }
+.match-actions.center { justify-content: center; }
+.list-title { font-size: 16px; margin: 24px 0 10px; }
+.note.left { text-align: left; margin-top: 0; }
+.sync { text-align: center; font-size: 13px; margin-top: 12px; color: var(--muted); }
+.sync.on { color: var(--primary); font-weight: 500; }
+.sync.error { color: #c62828; font-weight: 500; }
 
 /* ---------- Responsive ---------- */
 @media (max-width: 1100px) {

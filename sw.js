@@ -1,6 +1,6 @@
 // Service worker: caches the app shell so it works offline.
 // Bump CACHE when you change any file so users get the new version.
-const CACHE = 'crickethub-v2';
+const CACHE = 'crickethub-v3';
 const ASSETS = [
   './',
   './index.html',
@@ -8,6 +8,7 @@ const ASSETS = [
   './css/styles.css',
   './js/main.js',
   './js/scorer.js',
+  './js/firebase-config.js',
   './manifest.webmanifest',
   './icons/icon-192.png',
   './icons/icon-512.png'
@@ -30,6 +31,8 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   const req = event.request;
   if (req.method !== 'GET') return;
+  // Only handle this site's own files. Live-score database traffic must not be cached.
+  if (new URL(req.url).origin !== self.location.origin) return;
   event.respondWith(
     caches.match(req).then(cached => {
       const fresh = fetch(req).then(res => {

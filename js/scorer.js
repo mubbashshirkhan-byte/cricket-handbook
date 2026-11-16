@@ -1,5 +1,7 @@
 // Live scores: create a match and score it ball by ball.
-// Matches are saved in this browser's localStorage (per device).
+// Matches are always saved in this browser (localStorage). If js/firebase-config.js
+// holds a Firebase config, each match is also published to Firebase Realtime Database
+// so other devices can follow it live (read-only).
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => navigator.serviceWorker.register('sw.js'));
@@ -7,10 +9,19 @@ if ('serviceWorker' in navigator) {
 
 (function () {
   const KEY = 'crickethub.matches.v1';
+  const FB = 'https://www.gstatic.com/firebasejs/10.12.2/';
   const app = document.getElementById('app');
-  let extra = null; // pending modifier for the next ball: 'wd' | 'nb' | 'b' | 'lb' | null
+  const cfg = window.FIREBASE_CONFIG;
+  const cloudEnabled = !!(cfg && cfg.apiKey && cfg.databaseURL);
 
-  // ---------- storage ----------
+  let extra = null;      // pending modifier for the next ball: 'wd' | 'nb' | 'b' | 'lb' | null
+  let syncState = cloudEnabled ? 'connecting' : 'off'; // off | connecting | on | error
+  let remote = [];       // matches from other devices (list view)
+  let remoteLoaded = false;
+  let watchToken = 0;    // invalidates cloud listeners when the route changes
+  let unsub = null;
+
+  // ---------- local storage ----------
   const load = () => {
     try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch (e) { return []; }
   };
@@ -19,6 +30,75 @@ if ('serviceWorker' in navigator) {
   };
   const esc = s => String(s).replace(/[&<>"']/g, c =>
     ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+  // ---------- cloud (Firebase) ----------
+  const cloud = !cloudEnabled ? Promise.resolve(null) :
+    Promise.all([import(FB + 'firebase-app.js'), import(FB + 'firebase-auth.js'), import(FB + 'firebase-database.js')])
+      .then(mods => {
+        const A = mods[0], U = mods[1], D = mods[2];
+        const fb = A.initializeApp(cfg);
+        const db = D.getDatabase(fb);
+        return U.signInAnonymously(U.getAuth(fb)).then(cred => ({ D: D, db: db, uid: cred.user.uid }));
+      })
+      .then(c => { setSync('on'); return c; })
+      .catch(e => { console.error('Cloud sync unavailable:', e); setSync('error'); return null; });
+
+  function syncText() {
+    if (syncState === 'off') return 'Saved on this device only';
+    if (syncState === 'error') return '⚠ Not syncing. Check your connection.';
+    if (syncState === 'connecting') return 'Connecting…';
+    return '● Shared live';
+  }
+  function setSync(state) {
+    syncState = state;
+    const el = document.getElementById('sync');
+    if (el) { el.textContent = syncText(); el.className = 'sync ' + state; }
+  }
+
+  function pushCloud(m) {
+    cloud.then(c => {
+      if (!c) return;
+      return c.D.set(c.D.ref(c.db, 'matches/' + m.id), {
+        id: m.id, teams: m.teams, overs: m.overs, first: m.first, created: m.created,
+        owner: c.uid, updated: Date.now(),
+        balls0: m.balls[0], balls1: m.balls[1]
+      }).then(() => setSync('on'));
+    }).catch(e => { console.error('Sync failed:', e); setSync('error'); });
+  }
+  function removeCloud(id) {
+    cloud.then(c => c && c.D.remove(c.D.ref(c.db, 'matches/' + id))).catch(() => {});
+  }
+
+  const normBalls = v => (Array.isArray(v) ? v : v && typeof v === 'object' ? Object.values(v) : [])
+    .filter(Boolean)
+    .map(b => ({ r: Number(b.r) || 0, legal: !!b.legal, w: !!b.w, label: String(b.label == null ? '' : b.label) }));
+
+  function fromCloud(d) {
+    if (!d || !Array.isArray(d.teams) || d.teams.length !== 2 || !(Number(d.overs) >= 1)) return null;
+    return {
+      id: String(d.id), teams: [String(d.teams[0]), String(d.teams[1])],
+      overs: Number(d.overs), first: d.first ? 1 : 0, created: Number(d.created) || 0,
+      balls: [normBalls(d.balls0), normBalls(d.balls1)]
+    };
+  }
+
+  // Listen to one match (id) or to the latest matches (id = null) until the route changes.
+  function watch(id, cb) {
+    const token = watchToken;
+    cloud.then(c => {
+      if (token !== watchToken) return;
+      if (!c) { cb(null); return; }
+      const D = c.D;
+      const target = id ? D.ref(c.db, 'matches/' + id)
+        : D.query(D.ref(c.db, 'matches'), D.orderByChild('created'), D.limitToLast(30));
+      unsub = D.onValue(target,
+        snap => { if (token === watchToken) cb(snap.val()); },
+        () => { if (token === watchToken) cb(null); });
+    });
+  }
+
+  // Publish matches that were scored before sharing was switched on.
+  if (cloudEnabled) cloud.then(c => { if (c) load().forEach(pushCloud); });
 
   // ---------- match maths (everything is derived from the list of balls) ----------
   const sum = balls => balls.reduce((t, b) => {
@@ -63,7 +143,7 @@ if ('serviceWorker' in navigator) {
   }
 
   // ---------- views ----------
-  function scoreLine(m, st, i) {
+  function scoreLine(st, i) {
     const started = i === 0 || st.done1;
     const batting = !st.done2 && st.inn === i;
     return '<div class="sc-line' + (batting ? ' batting' : '') + '">' +
@@ -73,25 +153,55 @@ if ('serviceWorker' in navigator) {
         : '<small>Yet to bat</small>') + '</span></div>';
   }
 
-  function viewList() {
-    const matches = load().slice().reverse();
-    const card = m => {
-      const st = getState(m);
-      return '<a class="match-card" href="#/m/' + m.id + '">' +
-        '<div class="match-meta"><span class="badge ' + (st.done2 ? 'done' : 'live') + '">' +
-        (st.done2 ? 'Completed' : 'Live') + '</span><span>' + m.overs + ' overs</span></div>' +
-        scoreLine(m, st, 0) + scoreLine(m, st, 1) +
-        (st.result ? '<p class="match-result">' + esc(st.result) + '</p>' : '') + '</a>';
-    };
-    app.innerHTML =
+  function card(m) {
+    const st = getState(m);
+    return '<a class="match-card" href="#/m/' + encodeURIComponent(m.id) + '">' +
+      '<div class="match-meta"><span class="badge ' + (st.done2 ? 'done' : 'live') + '">' +
+      (st.done2 ? 'Completed' : 'Live') + '</span><span>' + m.overs + ' overs</span></div>' +
+      scoreLine(st, 0) + scoreLine(st, 1) +
+      (st.result ? '<p class="match-result">' + esc(st.result) + '</p>' : '') + '</a>';
+  }
+
+  function renderList() {
+    const mine = load().slice().reverse();
+    const mineIds = mine.map(m => m.id);
+    const others = remote.filter(m => mineIds.indexOf(m.id) === -1);
+
+    let html =
       '<div class="scorer-head"><div><h1>Live scores</h1><p>Create a match and score it ball by ball.</p></div>' +
-      '<a class="btn btn-primary" href="#/new">+ New match</a></div>' +
-      (matches.length
-        ? '<div class="match-list">' + matches.map(card).join('') + '</div>'
-        : '<div class="empty"><div class="empty-icon">🏏</div><h2>No matches yet</h2>' +
-          '<p>Start your first match to see the live score here.</p>' +
-          '<a class="btn btn-primary" href="#/new">Start a match</a></div>') +
-      '<p class="note">Matches are saved on this device only.</p>';
+      '<a class="btn btn-primary" href="#/new">+ New match</a></div>';
+
+    if (mine.length) {
+      html += (cloudEnabled ? '<h2 class="list-title">Scored on this device</h2>' : '') +
+        '<div class="match-list">' + mine.map(card).join('') + '</div>';
+    } else if (!others.length) {
+      html += '<div class="empty"><div class="empty-icon">🏏</div><h2>No matches yet</h2>' +
+        '<p>Start your first match to see the live score here.</p>' +
+        '<a class="btn btn-primary" href="#/new">Start a match</a></div>';
+    }
+
+    if (cloudEnabled) {
+      html += '<h2 class="list-title">Matches from other devices</h2>' +
+        (others.length ? '<div class="match-list">' + others.map(card).join('') + '</div>'
+          : '<p class="note left">' + (remoteLoaded ? 'No other matches right now.' : 'Loading…') + '</p>');
+    }
+
+    html += '<p class="note">' + (cloudEnabled
+      ? 'Matches you score are shared live. Anyone with the link can follow them.'
+      : 'Matches are saved on this device only.') + '</p>';
+    app.innerHTML = html;
+  }
+
+  function startList() {
+    remote = []; remoteLoaded = false;
+    renderList();
+    if (!cloudEnabled) return;
+    watch(null, val => {
+      remoteLoaded = true;
+      remote = Object.keys(val || {}).map(k => fromCloud(val[k])).filter(Boolean)
+        .sort((a, b) => b.created - a.created);
+      renderList();
+    });
   }
 
   function viewNew() {
@@ -121,7 +231,7 @@ if ('serviceWorker' in navigator) {
       if (msg) { err.textContent = msg; err.hidden = false; return; }
 
       const m = {
-        id: Date.now().toString(36),
+        id: Date.now().toString(36) + Math.random().toString(36).slice(2, 8),
         teams: [a, b],
         overs: overs,
         first: parseInt(f.first.value, 10),
@@ -131,17 +241,29 @@ if ('serviceWorker' in navigator) {
       const matches = load();
       matches.push(m);
       if (!save(matches)) { err.textContent = 'Could not save the match on this device.'; err.hidden = false; return; }
+      pushCloud(m);
       location.hash = '#/m/' + m.id;
     });
   }
 
-  function viewMatch(id) {
-    const m = load().find(x => x.id === id);
-    if (!m) {
-      app.innerHTML = '<a class="back-link" href="#/">← All matches</a>' +
-        '<div class="empty"><h2>Match not found</h2><p>It may have been deleted or scored on another device.</p></div>';
-      return;
-    }
+  function notFound(text) {
+    app.innerHTML = '<a class="back-link" href="#/">← All matches</a>' +
+      '<div class="empty"><h2>Match not found</h2><p>' + text + '</p></div>';
+  }
+
+  function startMatch(id) {
+    const local = load().find(x => x.id === id);
+    if (local) { renderMatch(local, false); return; }
+    if (!cloudEnabled) { notFound('It may have been deleted or scored on another device.'); return; }
+    app.innerHTML = '<a class="back-link" href="#/">← All matches</a><p class="note">Loading match…</p>';
+    watch(id, val => {
+      const m = fromCloud(val);
+      if (m) renderMatch(m, true);
+      else notFound('It may have been deleted, or the link is wrong.');
+    });
+  }
+
+  function renderMatch(m, readonly) {
     const st = getState(m);
     const i = st.inn, s = st.s[i];
     const over = currentOver(m.balls[i]);
@@ -155,12 +277,12 @@ if ('serviceWorker' in navigator) {
       info = '<p class="chase">' + esc(st.bat[1]) + ' need <strong>' + need + '</strong> run' + (need === 1 ? '' : 's') +
         ' from <strong>' + left + '</strong> ball' + (left === 1 ? '' : 's') +
         ' · Required rate ' + rate(need, left) + '</p>';
-    } else if (s.legal === 0 && !anyBalls) {
-      info = '<p class="chase">Tap a button below to record the first ball.</p>';
+    } else if (!anyBalls) {
+      info = '<p class="chase">' + (readonly ? 'The match has not started yet.' : 'Tap a button below to record the first ball.') + '</p>';
     }
 
     const mods = [['wd', 'Wide'], ['nb', 'No ball'], ['b', 'Bye'], ['lb', 'Leg bye']];
-    const pad = st.done2 ? '' :
+    const pad = (st.done2 || readonly) ? '' :
       '<div class="pad">' +
       '<div class="pad-mods">' + mods.map(x =>
         '<button type="button" data-mod="' + x[0] + '" class="mod' + (extra === x[0] ? ' on' : '') +
@@ -172,6 +294,14 @@ if ('serviceWorker' in navigator) {
         '<button type="button" data-run="' + n + '" class="run r' + n + '">' + n + '</button>').join('') + '</div>' +
       '<button type="button" data-act="wicket" class="wicket">Wicket</button>' +
       '</div>';
+
+    const share = cloudEnabled ? '<button type="button" data-act="share" class="btn btn-primary">Share live score</button>' : '';
+    const actions = readonly
+      ? '<p class="note">Live view. The score updates automatically.</p><div class="match-actions center">' + share + '</div>'
+      : '<p class="sync ' + syncState + '" id="sync">' + syncText() + '</p>' +
+        '<div class="match-actions">' + share +
+        '<button type="button" data-act="undo" class="btn btn-outline"' + (anyBalls ? '' : ' disabled') + '>↶ Undo last ball</button>' +
+        '<button type="button" data-act="delete" class="btn btn-danger">Delete match</button></div>';
 
     app.innerHTML =
       '<a class="back-link" href="#/">← All matches</a>' +
@@ -188,24 +318,21 @@ if ('serviceWorker' in navigator) {
       (over.length ? over.map(b => '<i class="ball' + (b.w ? ' w' : b.label === '4' || b.label === '6' ? ' boundary' : !b.legal ? ' ex' : '') +
         '">' + esc(b.label) + '</i>').join('') : '<small>No balls yet</small>') + '</div></div>' +
       '</section>' +
-      pad +
-      '<div class="match-actions">' +
-      '<button type="button" data-act="undo" class="btn btn-outline"' + (anyBalls ? '' : ' disabled') + '>↶ Undo last ball</button>' +
-      '<button type="button" data-act="delete" class="btn btn-danger">Delete match</button>' +
-      '</div>';
+      pad + actions;
   }
 
   // ---------- actions ----------
   function update(id, fn) {
     const matches = load();
     const m = matches.find(x => x.id === id);
-    if (!m) return;
+    if (!m) return null;
     fn(m, matches);
     save(matches);
+    return m;
   }
 
   function addBall(id, runs, wicket) {
-    update(id, m => {
+    const m = update(id, m => {
       const st = getState(m);
       if (st.done2) return;
       const penalty = extra === 'wd' || extra === 'nb';
@@ -218,11 +345,24 @@ if ('serviceWorker' in navigator) {
       m.balls[st.inn].push({ r: runs + (penalty ? 1 : 0), legal: !penalty, w: !!wicket, label: label });
     });
     extra = null;
+    if (m) pushCloud(m);
+  }
+
+  function shareMatch(btn) {
+    const url = location.href;
+    const done = text => { btn.textContent = text; setTimeout(() => { btn.textContent = 'Share live score'; }, 2000); };
+    if (navigator.share) {
+      navigator.share({ title: 'Live cricket score', url: url }).catch(() => {});
+    } else if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(() => done('Link copied'), () => window.prompt('Copy this link:', url));
+    } else {
+      window.prompt('Copy this link:', url);
+    }
   }
 
   function currentId() {
     const h = location.hash.match(/^#\/m\/(.+)$/);
-    return h ? h[1] : null;
+    return h ? decodeURIComponent(h[1]) : null;
   }
 
   app.addEventListener('click', e => {
@@ -231,6 +371,8 @@ if ('serviceWorker' in navigator) {
     const id = currentId();
     if (!id) return;
 
+    if (btn.dataset.act === 'share') { shareMatch(btn); return; }
+
     if (btn.dataset.mod) {
       extra = extra === btn.dataset.mod ? null : btn.dataset.mod;
     } else if (btn.dataset.run !== undefined) {
@@ -238,26 +380,31 @@ if ('serviceWorker' in navigator) {
     } else if (btn.dataset.act === 'wicket') {
       addBall(id, 0, true);
     } else if (btn.dataset.act === 'undo') {
-      update(id, m => { (m.balls[1].length ? m.balls[1] : m.balls[0]).pop(); });
+      const m = update(id, m => { (m.balls[1].length ? m.balls[1] : m.balls[0]).pop(); });
       extra = null;
+      if (m) pushCloud(m);
     } else if (btn.dataset.act === 'delete') {
       if (!window.confirm('Delete this match? This cannot be undone.')) return;
       update(id, (m, matches) => { matches.splice(matches.indexOf(m), 1); });
+      removeCloud(id);
       location.hash = '#/';
       return;
     } else {
       return;
     }
-    viewMatch(id);
+    const local = load().find(x => x.id === id);
+    if (local) renderMatch(local, false);
   });
 
   // ---------- router ----------
   function route() {
     extra = null;
+    watchToken++;
+    if (unsub) { unsub(); unsub = null; }
     const h = location.hash;
     if (h === '#/new') viewNew();
-    else if (currentId()) viewMatch(currentId());
-    else viewList();
+    else if (currentId()) startMatch(currentId());
+    else startList();
     window.scrollTo(0, 0);
   }
   window.addEventListener('hashchange', route);
