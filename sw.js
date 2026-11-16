@@ -1,11 +1,13 @@
 // Service worker: caches the app shell so it works offline.
 // Bump CACHE when you change any file so users get the new version.
-const CACHE = 'crickethub-v1';
+const CACHE = 'crickethub-v2';
 const ASSETS = [
   './',
   './index.html',
+  './matches.html',
   './css/styles.css',
   './js/main.js',
+  './js/scorer.js',
   './manifest.webmanifest',
   './icons/icon-192.png',
   './icons/icon-512.png'

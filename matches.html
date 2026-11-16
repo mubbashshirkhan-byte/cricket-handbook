@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Live Scores | CricketHub</title>
+  <meta name="description" content="Create a match and score it ball by ball.">
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#0b7a3e">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="CricketHub">
+  <link rel="apple-touch-icon" href="icons/icon-180.png">
+  <link rel="icon" type="image/png" href="icons/icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="scorer-page">
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="index.html" class="logo" aria-label="CricketHub home">
+      <span class="logo-mark">CH</span>
+      <span class="logo-text">Cricket<strong>Hub</strong></span>
+    </a>
+    <nav class="scorer-nav" aria-label="Main">
+      <a href="matches.html" class="active">Live scores</a>
+      <a href="index.html">Handbook</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container scorer" id="app" aria-live="polite"></main>
+
+<script src="js/scorer.js"></script>
+</body>
+</html>

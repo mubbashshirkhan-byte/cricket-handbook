@@ -192,6 +192,82 @@ ul, ol { list-style: none; }
 .socials a:hover { background: var(--primary); }
 .footer-bottom { border-top: 1px solid #232b3d; margin-top: 40px; padding-top: 18px; padding-bottom: 18px; font-size: 13px; }
 
+/* ---------- Live scores (matches.html) ---------- */
+.hero-cta { margin-top: 28px; position: relative; z-index: 1; }
+.scorer-nav { display: flex; gap: 6px; margin-left: auto; }
+.scorer-nav a { padding: 8px 14px; border-radius: 999px; font-size: 14px; font-weight: 500; color: var(--ink); }
+.scorer-nav a:hover { text-decoration: none; background: var(--bg-soft); }
+.scorer-nav a.active { background: #e6f4ec; color: var(--primary); font-weight: 600; }
+.scorer-page { background: var(--bg-soft); }
+.scorer { max-width: 640px; padding-top: 24px; padding-bottom: 60px; }
+.scorer h1 { font-size: 26px; line-height: 1.3; }
+.scorer-head { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
+.scorer-head p { color: var(--muted); font-size: 14px; }
+.back-link { display: inline-block; margin-bottom: 12px; font-size: 14px; font-weight: 500; }
+.note { color: var(--muted); font-size: 13px; text-align: center; margin-top: 24px; }
+
+.match-list { display: grid; gap: 14px; }
+.match-card { display: block; background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; color: var(--ink); }
+.match-card:hover { text-decoration: none; box-shadow: var(--shadow); }
+.match-meta { display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: var(--muted); margin-bottom: 10px; }
+.badge { padding: 2px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; }
+.badge.live { background: #fde8e8; color: #c62828; }
+.badge.live::before { content: "● "; }
+.badge.done { background: #e8ebf0; color: var(--muted); }
+.sc-line { display: flex; justify-content: space-between; gap: 12px; padding: 4px 0; color: var(--muted); }
+.sc-line.batting { color: var(--ink); font-weight: 600; }
+.sc-line em { font-style: normal; font-size: 11px; color: var(--primary); font-weight: 500; }
+.sc-score { white-space: nowrap; }
+.sc-score small { font-weight: 400; color: var(--muted); }
+.match-result { margin-top: 8px; font-size: 14px; font-weight: 600; color: var(--primary); }
+
+.empty { text-align: center; background: #fff; border: 1px dashed #c9d0db; border-radius: var(--radius); padding: 40px 20px; }
+.empty-icon { font-size: 40px; }
+.empty h2 { font-size: 20px; margin: 8px 0 4px; }
+.empty p { color: var(--muted); margin-bottom: 16px; }
+
+.match-form { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; margin-top: 16px; display: grid; gap: 16px; }
+.match-form label { display: grid; gap: 6px; font-size: 14px; font-weight: 500; }
+.match-form input:not([type=radio]) { font: inherit; font-size: 16px; padding: 12px 14px; border: 1px solid #c9d0db; border-radius: 10px; width: 100%; }
+.match-form input:focus { outline: 2px solid var(--primary); outline-offset: 1px; }
+.match-form fieldset { border: 0; display: flex; flex-wrap: wrap; gap: 8px 20px; }
+.match-form legend { font-size: 14px; font-weight: 500; margin-bottom: 6px; }
+.match-form .radio { display: flex; align-items: center; gap: 8px; font-weight: 400; }
+.form-error { color: #c62828; font-size: 14px; }
+
+.scoreboard { background: linear-gradient(135deg, var(--primary), #0f9d58); color: #fff; border-radius: var(--radius); padding: 18px; }
+.scoreboard .match-meta { color: #d5efe0; }
+.big-score { display: grid; text-align: center; padding: 6px 0 10px; }
+.big-team { font-size: 16px; font-weight: 500; overflow-wrap: anywhere; }
+.big-runs { font-size: 56px; font-weight: 700; line-height: 1.1; }
+.big-overs { font-size: 14px; color: #d5efe0; }
+.first-inn, .chase { text-align: center; font-size: 14px; color: #e6f4ec; margin-bottom: 6px; overflow-wrap: anywhere; }
+.chase strong { color: #fff; font-size: 16px; }
+.result-banner { background: #fff; color: var(--primary); font-weight: 700; text-align: center; border-radius: 10px; padding: 12px; margin: 8px 0; overflow-wrap: anywhere; }
+.this-over { display: flex; align-items: center; gap: 12px; background: rgba(0,0,0,.18); border-radius: 10px; padding: 10px 12px; margin-top: 10px; font-size: 13px; }
+.this-over > span { flex: none; color: #d5efe0; }
+.balls { display: flex; flex-wrap: wrap; gap: 6px; }
+.ball { font-style: normal; min-width: 32px; height: 32px; padding: 0 6px; border-radius: 16px; background: #fff; color: var(--ink); display: grid; place-items: center; font-size: 12px; font-weight: 600; }
+.ball.boundary { background: var(--accent); color: #fff; }
+.ball.w { background: #d62828; color: #fff; }
+.ball.ex { background: #dfe6f5; }
+
+.pad { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 14px; margin-top: 14px; display: grid; gap: 12px; }
+.pad button { font: inherit; font-weight: 600; border-radius: 12px; border: 1px solid #c9d0db; background: #fff; color: var(--ink); cursor: pointer; min-height: 52px; touch-action: manipulation; }
+.pad button:active { transform: scale(.97); }
+.pad-mods { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.pad .mod { font-size: 13px; min-height: 44px; }
+.pad .mod.on { background: var(--ink); color: #fff; border-color: var(--ink); }
+.pad-hint { font-size: 13px; color: var(--muted); text-align: center; }
+.pad-runs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.pad .run { font-size: 22px; min-height: 64px; background: var(--bg-soft); }
+.pad .run.r4, .pad .run.r6 { background: #fff3dc; border-color: var(--accent); }
+.pad .wicket { background: #d62828; border-color: #d62828; color: #fff; font-size: 17px; }
+.match-actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; margin-top: 16px; }
+.match-actions .btn:disabled { opacity: .45; cursor: not-allowed; }
+.btn-danger { border-color: #d62828; color: #d62828; background: transparent; }
+.btn-danger:hover { background: #d62828; color: #fff; }
+
 /* ---------- Responsive ---------- */
 @media (max-width: 1100px) {
   .main-nav, .header-actions .store-badge { display: none; }
