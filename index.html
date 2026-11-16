@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cricket Tournament Organising Handbook | CricketHub</title>
+  <meta name="description" content="A step-by-step handbook for organising a local cricket tournament: groundwork, venue, officials, scoring, registration, promotion, live streaming, sponsors and more.">
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#0b7a3e">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="CricketHub">
+  <link rel="apple-touch-icon" href="icons/icon-180.png">
+  <link rel="icon" type="image/png" href="icons/icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<!-- ================= HEADER ================= -->
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="#" class="logo" aria-label="CricketHub home">
+      <span class="logo-mark">CH</span>
+      <span class="logo-text">Cricket<strong>Hub</strong></span>
+    </a>
+
+    <nav class="main-nav" aria-label="Main">
+      <ul class="nav-list">
+        <li><a href="#">Home</a></li>
+        <li class="has-dropdown">
+          <button class="dd-toggle" aria-expanded="false">Live scores <span class="caret"></span></button>
+          <ul class="dropdown">
+            <li><a href="#">Matches</a></li>
+            <li><a href="#">Tournaments</a></li>
+            <li><a href="#">Associations</a></li>
+          </ul>
+        </li>
+        <li class="has-dropdown">
+          <button class="dd-toggle" aria-expanded="false">Network <span class="caret"></span></button>
+          <ul class="dropdown">
+            <li><a href="#">Community</a></li>
+            <li><a href="#">Looking for</a></li>
+          </ul>
+        </li>
+        <li class="has-dropdown">
+          <button class="dd-toggle" aria-expanded="false">Add ons <span class="caret"></span></button>
+          <ul class="dropdown">
+            <li><a href="#">CricketHub PRO</a></li>
+            <li class="has-submenu">
+              <a href="#">Go Live <span class="caret right"></span></a>
+              <ul class="submenu">
+                <li><a href="#">Capture</a></li>
+                <li><a href="#">With camera</a></li>
+                <li><a href="#">With phone</a></li>
+              </ul>
+            </li>
+            <li><a href="#">Your app</a></li>
+            <li><a href="#">Your web</a></li>
+            <li><a href="#">Super sponsor</a></li>
+          </ul>
+        </li>
+        <li class="has-dropdown">
+          <button class="dd-toggle" aria-expanded="false">More <span class="caret"></span></button>
+          <ul class="dropdown">
+            <li><a href="index.html" class="active">Tournament guide</a></li>
+            <li><a href="#">Cricket tips</a></li>
+            <li><a href="#">News</a></li>
+            <li><a href="#">FAQs</a></li>
+            <li><a href="#">Blogs</a></li>
+            <li><a href="#">Organize tournament</a></li>
+            <li><a href="#">Awards</a></li>
+            <li><a href="#">Cricket tools</a></li>
+          </ul>
+        </li>
+        <li><a href="#">Store</a></li>
+        <li><a href="#">Jobs</a></li>
+        <li><a href="#">Contact us</a></li>
+      </ul>
+    </nav>
+
+    <div class="header-actions">
+      <a href="#" class="store-badge small" aria-label="Get it on Google Play">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.6 1.8 13.8 12 3.6 22.2c-.4-.2-.6-.6-.6-1.1V2.9c0-.5.2-.9.6-1.1Zm11.6 11.6 2.6 2.6-11.9 6.8 9.3-9.4Zm3.9-3.9 2.9 1.7c.8.5.8 1.6 0 2.1l-2.9 1.7-2.9-3 2.9-2.5ZM5.9 1.2l11.9 6.8-2.6 2.6-9.3-9.4Z"/></svg>
+        <span>Google Play</span>
+      </a>
+      <a href="#" class="store-badge small" aria-label="Download on the App Store">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.4 12.6c0-2.6 2.1-3.8 2.2-3.9-1.2-1.8-3.1-2-3.7-2-1.6-.2-3.1.9-3.9.9-.8 0-2-.9-3.4-.9-1.7 0-3.3 1-4.2 2.6-1.8 3.1-.5 7.7 1.3 10.2.8 1.2 1.8 2.6 3.1 2.5 1.2 0 1.7-.8 3.2-.8s1.9.8 3.2.8c1.3 0 2.2-1.2 3-2.4.9-1.4 1.3-2.7 1.3-2.8 0 0-2.6-1-2.6-4.2ZM13.9 4.9c.7-.8 1.1-1.9 1-3-1 0-2.1.7-2.8 1.5-.6.7-1.2 1.8-1 2.9 1 .1 2.1-.6 2.8-1.4Z"/></svg>
+        <span>App Store</span>
+      </a>
+      <a href="#" class="btn btn-outline">Sign in</a>
+      <button class="menu-toggle" aria-label="Open menu" aria-controls="drawer" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile drawer -->
+<div class="drawer-backdrop" hidden></div>
+<aside id="drawer" class="drawer" aria-hidden="true">
+  <div class="drawer-head">
+    <a href="#" class="logo"><span class="logo-mark">CH</span><span class="logo-text">Cricket<strong>Hub</strong></span></a>
+    <button class="drawer-close" aria-label="Close menu">&times;</button>
+  </div>
+  <p class="drawer-tagline">Every run counts.</p>
+  <nav class="drawer-nav" aria-label="Mobile"></nav>
+  <a href="#" class="btn btn-primary btn-block">Sign in</a>
+</aside>
+
+<!-- ================= PAGE HERO ================= -->
+<section class="page-hero">
+  <div class="container">
+    <p class="eyebrow">Tournament guide</p>
+    <h1>Cricket tournament organising handbook</h1>
+    <p class="subtitle">9 easy steps to organise a local cricket tournament</p>
+    <div class="hero-stats">
+      <div><strong>40K+</strong><span>Tournaments hosted</span></div>
+      <div><strong>4K+</strong><span>Verified scorers</span></div>
+      <div><strong>3.5K+</strong><span>Umpires</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CONTENT ================= -->
+<main class="container handbook">
+  <aside class="toc" aria-label="Table of contents">
+    <button class="toc-toggle" aria-expanded="false">Contents <span class="caret"></span></button>
+    <ol class="toc-list">
+      <li><a href="#section-1">Introduction</a></li>
+      <li><a href="#section-2">Groundwork</a></li>
+      <li><a href="#section-3">Venue &amp; match officials</a></li>
+      <li><a href="#section-4">A scoring platform</a></li>
+      <li><a href="#section-5">Tournament registration</a></li>
+      <li><a href="#section-6">Tournament promotion</a></li>
+      <li><a href="#section-7">Scoring</a></li>
+      <li><a href="#section-8">Live streaming</a></li>
+      <li><a href="#section-9">Recognize sponsors</a></li>
+      <li><a href="#section-10">Personalized mobile app</a></li>
+      <li><a href="#section-11">One stop solution</a></li>
+    </ol>
+    <div class="toc-progress"><span></span></div>
+  </aside>
+
+  <article class="content">
+
+    <section id="section-1" class="hb-section">
+      <h2><span class="num">01</span>Introduction</h2>
+      <p>Running a local cricket tournament is part sport, part project management. Before the first ball is bowled, every organiser ends up asking the same handful of questions:</p>
+      <ul class="check-list">
+        <li>Where do I find teams and match officials?</li>
+        <li>How do I book a suitable ground?</li>
+        <li>How can I bring sponsors on board?</li>
+        <li>Is there an app that makes the whole thing easier?</li>
+        <li>How do I make sure the event actually runs smoothly?</li>
+      </ul>
+      <p>This handbook walks through each of those, step by step. It is built on lessons from organisers who have collectively run <strong>40,000+ tournaments</strong> on <strong>CricketHub</strong> over the past few years.</p>
+    </section>
+
+    <section id="section-2" class="hb-section">
+      <h2><span class="num">02</span>Groundwork</h2>
+      <p>Settle the basics first. These decisions shape everything else, from the venue you book to the teams you invite.</p>
+      <div class="card-grid three">
+        <div class="info-card">
+          <div class="icon">🏏</div>
+          <h3>Ball type</h3>
+          <p>Tennis ball, leather ball or tape ball. Each one changes the pitch you need, the safety gear and the kind of teams you attract.</p>
+        </div>
+        <div class="info-card">
+          <div class="icon">🏆</div>
+          <h3>Tournament style</h3>
+          <p>Knockout, league, round-robin or a hybrid with group stages. Pick based on the number of teams and the days available.</p>
+        </div>
+        <div class="info-card">
+          <div class="icon">👥</div>
+          <h3>Category</h3>
+          <p>Age groups (U-16, U-19), corporate, box cricket or an open tournament. The category decides who you can invite.</p>
+        </div>
+      </div>
+      <div class="callout">
+        <h4>Think about sponsors early</h4>
+        <p>Sports brands and local businesses respond to a clear pitch. Plan both the offline visibility (banners, boundary boards, prize ceremonies) and the online visibility (live scorecards, streams, social posts) you can offer them. Keep a task checklist so nothing slips.</p>
+      </div>
+    </section>
+
+    <section id="section-3" class="hb-section">
+      <h2><span class="num">03</span>Select the venue &amp; match officials</h2>
+      <p>Find grounds near you through the <a href="#">Cricket Grounds</a> directory. In the app, open the <strong>Community</strong> tab and choose <strong>Grounds</strong> to browse by location, facilities and price.</p>
+      <div class="media-row two">
+        <figure class="mock-phone" data-label="Community"><div class="screen"><span>Community</span><i></i><i></i><i></i></div><figcaption>Community tab</figcaption></figure>
+        <figure class="mock-phone" data-label="Grounds"><div class="screen"><span>Grounds</span><i></i><i></i><i></i></div><figcaption>Grounds listing</figcaption></figure>
+      </div>
+      <p>Good officials make the tournament fair and the stats reliable. The same Community section lists verified people you can contact directly:</p>
+      <div class="card-grid three">
+        <a href="#" class="stat-card"><strong>4,000+</strong><span>Scorers</span></a>
+        <a href="#" class="stat-card"><strong>3,500+</strong><span>Umpires</span></a>
+        <a href="#" class="stat-card"><strong>1,000+</strong><span>Commentators</span></a>
+      </div>
+    </section>
+
+    <section id="section-4" class="hb-section">
+      <h2><span class="num">04</span>A scoring platform for tournament matches</h2>
+      <p>You can keep score on paper or digitally. Here is how the two compare.</p>
+      <div class="compare">
+        <div class="compare-col bad">
+          <h3>Offline scoring</h3>
+          <ul>
+            <li>Scorebooks get lost or damaged</li>
+            <li>Stats and leaderboards must be totalled by hand</li>
+            <li>Fans and players can't follow along live</li>
+            <li>Errors are hard to spot and correct</li>
+          </ul>
+        </div>
+        <div class="compare-col good">
+          <h3>Online scoring</h3>
+          <ul>
+            <li>Ball-by-ball data saved instantly in the cloud</li>
+            <li>Automatic player stats, points tables and awards</li>
+            <li>Live scores anyone can share</li>
+            <li>Gives sponsors measurable online visibility</li>
+          </ul>
+        </div>
+      </div>
+      <p>Several platforms offer online scoring. Compare features, pricing and community size before you choose. CricketHub is free to score and is used by millions of registered players.</p>
+    </section>
+
+    <section id="section-5" class="hb-section">
+      <h2><span class="num">05</span>Tournament registration</h2>
+      <p>Once your groundwork is done, set the tournament up in the app:</p>
+      <ol class="steps">
+        <li><strong>Add a tournament</strong>: open the side menu and tap <em>Add a Tournament</em>.</li>
+        <li><strong>General details</strong>: name, logo, ground, category and ball type.</li>
+        <li><strong>Teams &amp; officials</strong>: invite teams and assign scorers, umpires and commentators.</li>
+        <li><strong>Schedule</strong>: create fixtures manually or auto-generate them.</li>
+        <li><strong>Rules</strong>: overs, powerplays, tie-breakers and points system.</li>
+        <li><strong>Fees &amp; prizes</strong>: set the entry fee per team and announce the prizes.</li>
+      </ol>
+      <p>Running an open tournament? Post it in the <strong>Looking for</strong> section so teams in your area can find it and apply.</p>
+    </section>
+
+    <section id="section-6" class="hb-section">
+      <h2><span class="num">06</span>Tournament promotion</h2>
+      <p>A well-promoted tournament attracts stronger teams, bigger crowds and more sponsor interest.</p>
+      <div class="card-grid two">
+        <div class="info-card"><h3>Share the tournament page</h3><p>Every tournament gets a public page with fixtures, teams and points table. Share the link on WhatsApp groups and social media.</p></div>
+        <div class="info-card"><h3>Posters &amp; match cards</h3><p>Auto-generated posters for fixtures, results and player milestones keep your audience engaged throughout the event.</p></div>
+        <div class="info-card"><h3>Reach local players</h3><p>Nearby players get notified about tournaments in their area, which helps fill open slots.</p></div>
+        <div class="info-card"><h3>Highlight sponsors</h3><p>Promotion posts can carry sponsor logos, which adds value to every deal you sign.</p></div>
+      </div>
+    </section>
+
+    <section id="section-7" class="hb-section">
+      <h2><span class="num">07</span>Scoring cricket tournament</h2>
+      <p>Scoring needs no technical skill. If you can tap a phone screen, you can score a match. Choose the batters and bowler, then record each delivery. The app handles extras, strike rotation, partnerships and the full scorecard.</p>
+      <div class="media-row two">
+        <figure class="mock-phone"><div class="screen"><span>Live scoring</span><i></i><i></i><i></i></div><figcaption>Scoring screen</figcaption></figure>
+        <figure class="mock-phone"><div class="screen"><span>Settings</span><i></i><i></i><i></i></div><figcaption>Scoring settings</figcaption></figure>
+      </div>
+      <a href="#" class="btn btn-primary">▶ Watch the scoring tutorial</a>
+    </section>
+
+    <section id="section-8" class="hb-section">
+      <h2><span class="num">08</span>Live streaming the tournament to anyone in the world</h2>
+      <p>Streaming lets families, fans and sponsors watch from anywhere. You have three options:</p>
+      <ul class="check-list">
+        <li>Set up your own professional camera and broadcast rig</li>
+        <li>Hire a local streaming provider</li>
+        <li>Stream straight from a smartphone, the cheapest and simplest option</li>
+      </ul>
+      <h3>Streaming from your phone</h3>
+      <ol class="steps">
+        <li>Open the match you want to broadcast.</li>
+        <li>Tap <strong>Start Streaming</strong>.</li>
+        <li>Choose a plan and complete payment.</li>
+        <li>Install the companion live-stream app.</li>
+        <li>Go live with the score overlay in the app and on YouTube.</li>
+      </ol>
+      <div class="media-row two">
+        <figure class="mock-phone"><div class="screen"><span>Start streaming</span><i></i><i></i><i></i></div><figcaption>Start streaming</figcaption></figure>
+        <figure class="mock-phone"><div class="screen"><span>Plans</span><i></i><i></i><i></i></div><figcaption>Pricing plans</figcaption></figure>
+      </div>
+      <h3>Sample streams</h3>
+      <div class="video-grid">
+        <a href="#" class="video-card"><span class="play">▶</span><span>Final: Strikers vs Gladiators</span></a>
+        <a href="#" class="video-card"><span class="play">▶</span><span>Semi-final: Titans vs Royals</span></a>
+        <a href="#" class="video-card"><span class="play">▶</span><span>League match: Warriors vs Kings</span></a>
+      </div>
+    </section>
+
+    <section id="section-9" class="hb-section">
+      <h2><span class="num">09</span>Recognize your sponsors</h2>
+      <p>Sponsors want to be seen. With the <strong>Super Sponsor</strong> feature, their logos appear on live scorecards, match summaries and tournament pages, so every viewer sees them.</p>
+      <div class="media-row two">
+        <figure class="mock-phone"><div class="screen"><span>Super sponsors</span><i></i><i></i><i></i></div><figcaption>Sponsor showcase</figcaption></figure>
+        <figure class="mock-phone"><div class="screen"><span>Match summary</span><i></i><i></i><i></i></div><figcaption>Match summary with sponsors</figcaption></figure>
+      </div>
+      <div class="cta-banner">
+        <div>
+          <h3>Want sponsor visibility for your tournament?</h3>
+          <p>Talk to our team and we'll set it up for you.</p>
+        </div>
+        <a href="#" class="btn btn-light">Contact us</a>
+      </div>
+    </section>
+
+    <section id="section-10" class="hb-section">
+      <h2><span class="num">10</span>A personalized mobile app for you and your audience</h2>
+      <p>With <a href="#">Your App</a>, your tournament gets its own branded mobile app, with your name and logo, carrying:</p>
+      <div class="chip-list">
+        <span>Live scores</span><span>Scorecards</span><span>Leaderboard</span><span>Boundary tracker</span>
+        <span>Sponsors</span><span>Teams</span><span>Standings</span><span>Gallery</span><span>Rules</span>
+      </div>
+      <div class="media-row two">
+        <figure class="mock-phone brand"><div class="screen"><span>Your logo</span></div><figcaption>Splash screen</figcaption></figure>
+        <figure class="mock-phone"><div class="screen"><span>Tournaments</span><i></i><i></i><i></i></div><figcaption>Tournament listing</figcaption></figure>
+      </div>
+    </section>
+
+    <section id="section-11" class="hb-section">
+      <h2><span class="num">11</span>CricketHub: a one stop solution</h2>
+      <p>Everything an organiser needs, in one place:</p>
+      <div class="card-grid five">
+        <div class="mini-card">📊<span>Online scoring</span></div>
+        <div class="mini-card">📣<span>Tournament promotion</span></div>
+        <div class="mini-card">🤝<span>Sponsor promotion</span></div>
+        <div class="mini-card">🎥<span>Live streaming</span></div>
+        <div class="mini-card">📱<span>Custom tournament app</span></div>
+      </div>
+      <p class="closing">Plan well, score digitally, promote widely, and your tournament will be remembered long after the final ball. Good luck!</p>
+      <a href="#" class="btn btn-primary">Organize a tournament for free</a>
+    </section>
+
+  </article>
+</main>
+
+<button class="back-to-top" aria-label="Back to top">↑</button>
+
+<!-- ================= FOOTER ================= -->
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-brand">
+      <a href="#" class="logo light"><span class="logo-mark">CH</span><span class="logo-text">Cricket<strong>Hub</strong></span></a>
+      <p>Every run counts.</p>
+      <div class="badges">
+        <a href="#" class="store-badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.6 1.8 13.8 12 3.6 22.2c-.4-.2-.6-.6-.6-1.1V2.9c0-.5.2-.9.6-1.1Zm11.6 11.6 2.6 2.6-11.9 6.8 9.3-9.4Zm3.9-3.9 2.9 1.7c.8.5.8 1.6 0 2.1l-2.9 1.7-2.9-3 2.9-2.5ZM5.9 1.2l11.9 6.8-2.6 2.6-9.3-9.4Z"/></svg><span><small>Get it on</small>Google Play</span></a>
+        <a href="#" class="store-badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.4 12.6c0-2.6 2.1-3.8 2.2-3.9-1.2-1.8-3.1-2-3.7-2-1.6-.2-3.1.9-3.9.9-.8 0-2-.9-3.4-.9-1.7 0-3.300 1-4.2 2.6-1.8 3.1-.5 7.7 1.3 10.2.8 1.2 1.8 2.6 3.1 2.5 1.2 0 1.7-.8 3.2-.8s1.9.8 3.2.8c1.3 0 2.2-1.2 3-2.4.9-1.4 1.3-2.7 1.3-2.8 0 0-2.6-1-2.6-4.2ZM13.9 4.9c.7-.8 1.1-1.9 1-3-1 0-2.1.7-2.8 1.5-.6.7-1.2 1.8-1 2.9 1 .1 2.1-.6 2.8-1.4Z"/></svg><span><small>Download on the</small>App Store</span></a>
+      </div>
+    </div>
+    <div>
+      <h4>Company</h4>
+      <ul><li><a href="#">About</a></li><li><a href="#">Jobs</a></li><li><a href="#">Contact us</a></li></ul>
+    </div>
+    <div>
+      <h4>Legal</h4>
+      <ul><li><a href="#">Privacy policy</a></li><li><a href="#">Terms of service</a></li><li><a href="#">Paid service terms</a></li><li><a href="#">Anti-harassment policy</a></li></ul>
+    </div>
+    <div>
+      <h4>Follow us</h4>
+      <div class="socials">
+        <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24"><path d="M14 8h3V4h-3c-2.8 0-4 1.8-4 4.3V10H7v4h3v8h4v-8h3l1-4h-4V8.6c0-.4.3-.6.6-.6Z"/></svg></a>
+        <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24"><path d="M12 7.3A4.7 4.7 0 1 0 12 16.7 4.7 4.7 0 0 0 12 7.3Zm0 7.7a3 3 0 1 1 0-6 3 3 0 0 1 0 6Zm6-7.9a1.1 1.1 0 1 1-2.2 0 1.1 1.1 0 0 1 2.2 0ZM16.5 2h-9A5.5 5.5 0 0 0 2 7.5v9A5.5 5.5 0 0 0 7.5 22h9a5.5 5.5 0 0 0 5.5-5.5v-9A5.5 5.5 0 0 0 16.5 2Zm3.7 14.5a3.7 3.7 0 0 1-3.7 3.7h-9a3.7 3.7 0 0 1-3.7-3.7v-9a3.7 3.7 0 0 1 3.7-3.7h9a3.7 3.7 0 0 1 3.7 3.7v9Z"/></svg></a>
+        <a href="#" aria-label="YouTube"><svg viewBox="0 0 24 24"><path d="M22 8.2s-.2-1.5-.8-2.1c-.8-.8-1.7-.8-2.1-.9C16.2 5 12 5 12 5s-4.2 0-7.1.2c-.4.1-1.3.1-2.1.9-.6.6-.8 2.1-.8 2.1S2 9.900 2 11.600v1.600c0 1.700.2 3.400.2 3.400s.2 1.500.8 2.100c.8.8 1.800.8 2.300.9 1.700.2 6.900.2 6.900.2s4.200 0 7.100-.2c.4-.1 1.300-.1 2.100-.9.6-.6.8-2.100.8-2.100s.2-1.700.2-3.400v-1.600c0-1.700-.4-3.400-.4-3.400ZM10 15V9l5.200 3L10 15Z"/></svg></a>
+      </div>
+    </div>
+  </div>
+  <div class="container footer-bottom">
+    <p>© <span id="year"></span> CricketHub. All rights reserved.</p>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>
